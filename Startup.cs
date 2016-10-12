@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using ChatterboxApi.Config;
 
 namespace ChatterboxAppApi
 {
@@ -27,7 +31,6 @@ namespace ChatterboxAppApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             services.AddMvc();
         }
 
@@ -36,7 +39,21 @@ namespace ChatterboxAppApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            app.UseJwtBearerAuthentication(new JwtBearerOptions  
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = "https://issuer.example.com",
 
+                    ValidateAudience = true,
+                    ValidAudience = "http://localhost:5000",
+
+                    ValidateLifetime = true,
+                }
+            });
             app.UseMvc();
         }
     }

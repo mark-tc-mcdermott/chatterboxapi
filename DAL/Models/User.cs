@@ -1,20 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; 
 
 namespace ChatterboxApi.DAL.Models
 {
     public class User
     {
-        [Key]
+        [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public string email { get; set; }
+        public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
-        public string password { get; set; }
+        public string Password { get; set; }
 
 
         public System.DateTime CreationDate { get; set;}
