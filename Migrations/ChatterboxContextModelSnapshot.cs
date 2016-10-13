@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Chatterbox.DAL;
+using ChatterboxApi.DAL;
 
 namespace ChatterboxAppApi.Migrations
 {
@@ -24,6 +24,8 @@ namespace ChatterboxAppApi.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int>("UserId");
+
                     b.HasKey("ChatId");
 
                     b.ToTable("Chats");
@@ -34,23 +36,15 @@ namespace ChatterboxAppApi.Migrations
                     b.Property<int>("MessageId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ChatId");
+                    b.Property<int>("ChatId");
 
                     b.Property<DateTime>("CreationDate");
 
-                    b.Property<int?>("fromUserIdUserId");
+                    b.Property<string>("MessageContent");
 
-                    b.Property<string>("messageContent");
-
-                    b.Property<int?>("toUserIdUserId");
+                    b.Property<int>("fromUserId");
 
                     b.HasKey("MessageId");
-
-                    b.HasIndex("ChatId");
-
-                    b.HasIndex("fromUserIdUserId");
-
-                    b.HasIndex("toUserIdUserId");
 
                     b.ToTable("Messages");
                 });
@@ -62,30 +56,17 @@ namespace ChatterboxAppApi.Migrations
 
                     b.Property<DateTime>("CreationDate");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("password");
+                    b.Property<string>("Password")
+                        .IsRequired();
 
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ChatterboxApi.DAL.Models.Message", b =>
-                {
-                    b.HasOne("ChatterboxApi.DAL.Models.Chat", "chatId")
-                        .WithMany()
-                        .HasForeignKey("ChatId");
-
-                    b.HasOne("ChatterboxApi.DAL.Models.User", "fromUserId")
-                        .WithMany()
-                        .HasForeignKey("fromUserIdUserId");
-
-                    b.HasOne("ChatterboxApi.DAL.Models.User", "toUserId")
-                        .WithMany()
-                        .HasForeignKey("toUserIdUserId");
                 });
         }
     }
