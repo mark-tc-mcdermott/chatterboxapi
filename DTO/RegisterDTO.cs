@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System;
 using System.Linq;
+using ChatterboxApi.DAL.Models;
 
 
 namespace ChatterboxApi.DTO
@@ -25,6 +26,14 @@ namespace ChatterboxApi.DTO
 
     public class UserResponseDTO
     {
+        public UserResponseDTO() : base() {}
+        public UserResponseDTO(User user_ref)
+        {
+            this.id = user_ref.UserId;
+            this.email= user_ref.Email;
+            this.name= user_ref.Name;
+            this.token = setToken(user_ref.UserId,user_ref.Email);
+        }
         public int id { get; set;}
 
         public string email {get;set;}
@@ -32,15 +41,15 @@ namespace ChatterboxApi.DTO
 
         public string token { get; set; }
 
-        public void setToken()
+        public string setToken(int id, string email)
         {
-            byte[] toBytes = System.Text.Encoding.ASCII.GetBytes(JsonConvert.SerializeObject( new { user_id=this.id, user_email=this.email}));
-            string s = Convert.ToBase64String(toBytes); // Standard base64 encoder
+            byte[] toBytes = System.Text.Encoding.ASCII.GetBytes(JsonConvert.SerializeObject( new { user_id=id, user_email=email}));
+            string s = Convert.ToBase64String(toBytes); 
         
-            s = s.Split('=')[0]; // Remove any trailing '='s
-            s = s.Replace('+', '-'); // 62nd char of encoding
-            s = s.Replace('/', '_'); // 63rd char of encoding
-            this.token = s;
+            s = s.Split('=')[0]; 
+            s = s.Replace('+', '-'); 
+            s = s.Replace('/', '_'); 
+            return s;
         }
     }
 }
