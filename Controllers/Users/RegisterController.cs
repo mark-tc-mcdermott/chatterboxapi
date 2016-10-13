@@ -7,7 +7,7 @@ using ChatterboxApi.DTO;
 using System.Net.Http;
 using Microsoft.AspNetCore.Owin;
 using ChatterboxApi.DAL.Models;
-using Chatterbox.DAL;
+using ChatterboxApi.DAL;
 using System.Net;
 using Newtonsoft.Json;
 
@@ -16,33 +16,22 @@ namespace ChatterboxAppApi.Controllers
     [Route("users/register")]
     public class RegisterController : Controller
     {
+        private ChatterboxRepository cbRep;
+
+        public RegisterController()
+        {
+             this.cbRep = new ChatterboxRepository(new ChatterboxContext());
+        }
 
         [HttpPost]
         public ActionResult Post([FromBody] RegisterDTO payload)
         {
             if (ModelState.IsValid)
             {
-                var user = new User()
-                {
-                    Name = payload.name,
-                    Email = payload.email,
-                    Password = payload.password,
-                    CreationDate = System.DateTime.Now
-                };
-                using (var db = new ChatterboxContext())
-                {
-                    db.Users.Add(user);
-                    db.SaveChanges();
-                }
-                var registerdto = new UserResponseDTO()
-                {
-                    id = user.UserId,
-                    email= user.Email,
-                    name= user.Name
-                };
-                registerdto.setToken();
+                User user = new User(payload);
+                this.cbRep.InsertUser(user);
                 
-                return Json(new { success=true, data= registerdto});
+                return Json(new { success=true, data= new UserResponseDTO(user)});
             }
             else
             {   
