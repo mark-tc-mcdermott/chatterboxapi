@@ -1,18 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; 
 
 
 namespace ChatterboxApi.DAL.Models
 {
     public class Message
     {
-        [Key]
+        [Key]  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MessageId { get; set; }
-        public virtual User toUserId { get; set; }
-        public virtual User fromUserId { get; set; }
-        public virtual Chat chatId { get; set; }
-        public string messageContent { get; set; }
+        public int  fromUserId { get; set; }
+        public int  ChatId { get; set; }
+        public string MessageContent { get; set; }
         public System.DateTime CreationDate { get; set; }
     }
 }
