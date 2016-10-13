@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using ChatterboxApi.DAL.Models;
 
-namespace Chatterbox.DAL
+namespace ChatterboxApi.DAL
 {
     public class ChatterboxContext : DbContext 
     { 

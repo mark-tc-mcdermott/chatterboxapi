@@ -13,6 +13,7 @@ namespace ChatterboxAppApi
     {
         public static void Main(string[] args)
         {
+            Console.Title = "IdentityServer";
             var config = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
@@ -21,6 +22,7 @@ namespace ChatterboxAppApi
             var host = new WebHostBuilder()
                 .UseConfiguration(config)
                 .UseKestrel()
+                .UseUrls("http://localhost:5000")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
